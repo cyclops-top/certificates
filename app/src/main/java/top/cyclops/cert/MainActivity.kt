@@ -6,8 +6,6 @@ import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.pm.PackageInfo
-import android.content.pm.PackageItemInfo
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -24,20 +22,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -50,9 +41,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.PermissionChecker
@@ -164,6 +153,7 @@ fun PackageItem(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CopyDialog(onDismissRequest: () -> Unit, information: PackageInformation?) {
     val context = LocalContext.current
@@ -258,17 +248,20 @@ fun CopyDialog(onDismissRequest: () -> Unit, information: PackageInformation?) {
                     }) {
                     Text(text = "SHA256")
                 }
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        copy(
-                            information.signatures.first().publicKey.modulus.toByteArray()
-                                .toHexString(showSeparator, uppercase)
-                                .removePrefix("00:")
-                        )
+                val publicKey =information.signatures.first().publicKey
+                if(publicKey != null){
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            copy(
+                               publicKey.modulus.toByteArray()
+                                    .toHexString(showSeparator, uppercase)
+                                    .removePrefix("00:")
+                            )
 
-                    }) {
-                    Text(text = "PUBLIC KEY")
+                        }) {
+                        Text(text = "PUBLIC KEY")
+                    }
                 }
             }
 

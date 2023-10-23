@@ -4,7 +4,7 @@ import java.security.interfaces.RSAPublicKey
 
 data class PackageSignature(
     val signature: ByteArray,
-    val publicKey: RSAPublicKey,
+    val publicKey: RSAPublicKey?,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

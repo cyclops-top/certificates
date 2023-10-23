@@ -52,7 +52,7 @@ class MainViewModel : ViewModel() {
                 .use { cert ->
                     (CertificateFactory.getInstance("X509")
                         .generateCertificate(cert) as X509Certificate)
-                        .publicKey as RSAPublicKey
+                        .publicKey as? RSAPublicKey
                 }
         )
     }
